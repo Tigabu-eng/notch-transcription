@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: notch-mcp-server
+    runtime: python
+    repo: https://github.com/YOUR_USERNAME/notch-transcription-skill
+    plan: free
+    envVars:
+      - key: NOTCH_API_URL
+        value: https://notch-api-owz7.onrender.com  # Your deployed Notch API
+      - key: INVENIAS_API_URL
+        value: https://notch-api-owz7.onrender.com
+      - key: MCP_API_TOKEN
+        generateValue: true  # Render auto-generates a secure token
+      - key: PYTHON_VERSION
+        value: 3.11
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m notch_claude_skill.server

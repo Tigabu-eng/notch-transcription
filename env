@@ -1,0 +1,10 @@
+NOTCH_API_URL=https://notch-api-owz7.onrender.com
+INVENIAS_API_URL=https://notch-api-owz7.onrender.com
+
+
+# Skill Governance (per internal standards)
+SKILL_NAME="Deal Team – Call Transcription & Analysis – Approved"
+SKILL_VERSION="1.0.0"
+SKILL_STATUS="approved"
+SKILL_OWNER="Deal Team"
+SKILL_REVIEW_DATE="2024-01-15"

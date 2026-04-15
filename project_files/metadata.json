@@ -1,0 +1,73 @@
+{
+  "skill_name": "Deal Team – Call Transcription & Analysis – Approved",
+  "version": "1.0.0",
+  "status": "approved",
+  "category": "connector-backed",
+  "owner": "Deal Team",
+  "owner_contact": "@deal-team-lead",
+  "last_review_date": "2024-01-15",
+  "next_review_date": "2024-04-15",
+  "review_cadence": "quarterly",
+  "dependencies": [
+    {
+      "name": "Notch API",
+      "url": "http://notch-api-owz7.onrender.com",
+      "type": "internal_service"
+    },
+    {
+      "name": "Invenias CRM",
+      "url": "http://notch-api-owz7.onrender.com/api/invenias",
+      "type": "internal_service"
+    }
+  ],
+  "permission_model": "individual_user_auth",
+  "tools_count": 10,
+  "tools": [
+    "get_skill_info",
+    "process_transcript",
+    "list_recent_calls",
+    "get_call_insights",
+    "share_to_invenias",
+    "search_invenias_people",
+    "keep_personal",
+    "generate_summary_and_actions",
+    "search_transcripts",
+    "get_destination_status"
+  ],
+  "output_destinations": [
+    {
+      "name": "Personal",
+      "status": "available",
+      "description": "Private to the user only"
+    },
+    {
+      "name": "Invenias",
+      "status": "available",
+      "description": "Attached to person record in CRM"
+    }
+  ],
+  "api_endpoints": {
+    "notch_base": "http://notch-api-owz7.onrender.com",
+    "invenias_search": "/api/invenias/search",
+    "invenias_post": "/api/invenias/post",
+    "calls_list": "/api/calls",
+    "calls_analyze": "/api/calls/{id}/analyze",
+    "calls_insights": "/api/calls/{id}/insights",
+    "calls_search": "/api/calls/search"
+  },
+  "governance": {
+    "approval_status": "approved",
+    "access_restriction": "deal_team_only",
+    "external_sharing": false,
+    "requires_auth": true,
+    "support_escalation": "@deal-tech-support"
+  },
+  "change_log": [
+    {
+    "version": "1.0.0",
+    "date": "2024-01-15",
+    "changes": "Initial release",
+    "author": "Deal Team"
+    }
+  ]
+}
