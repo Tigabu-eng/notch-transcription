@@ -746,6 +746,11 @@ class NotchMCPTool:
                     self.mcp_server.create_initialization_options()
                 )
         
+        async def handle_messages(request):
+            """Handle POST messages to /messages endpoint"""
+            # This is the correct way to call handle_post_message with ASGI parameters
+            return await self.transport.handle_post_message(request.scope, request.receive, request._send)
+        
         async def health_check(request):
             """Health check endpoint for Render"""
             return JSONResponse({
@@ -759,34 +764,36 @@ class NotchMCPTool:
             """Handle CORS preflight requests"""
             return Response(status_code=200, headers={
                 "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+                "Access-Control-Allow-Credentials": "true",
             })
         
         # Create Starlette app
         app = Starlette(
             routes=[
-                Route("/health", health_check, methods=["GET"]),
+                Route("/health", health_check, methods=["GET", "HEAD"]),
                 Route("/sse", handle_sse, methods=["GET"]),
-                Route("/messages", self.transport.handle_post_message, methods=["POST"]),
+                Route("/messages", handle_messages, methods=["POST"]),
                 Route("/{path:path}", cors_options, methods=["OPTIONS"]),
             ],
             middleware=[
                 Middleware(
                     CORSMiddleware,
                     allow_origins=["*"],
-                    allow_methods=["GET", "POST", "OPTIONS"],
-                    allow_headers=["Content-Type", "Authorization"],
+                    allow_methods=["GET", "POST", "OPTIONS", "DELETE"],
+                    allow_headers=["*"],
+                    allow_credentials=True,
                 )
             ]
         )
         
         logger.info(f"Starting Notch MCP Server on {HOST}:{PORT}")
         logger.info(f"SSE endpoint: http://{HOST}:{PORT}/sse")
+        logger.info(f"Messages endpoint: http://{HOST}:{PORT}/messages")
         logger.info(f"Health check: http://{HOST}:{PORT}/health")
         
-        # FIXED: Use uvicorn.Config and server pattern instead of uvicorn.run()
-        # This avoids the "asyncio.run() cannot be called from a running event loop" error
+        # Use uvicorn.Config and server pattern to avoid event loop issues
         config = uvicorn.Config(app, host=HOST, port=PORT, log_level="info")
         server = uvicorn.Server(config)
         await server.serve()
