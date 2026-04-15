@@ -2,7 +2,7 @@ services:
   - type: web
     name: notch-mcp-server
     runtime: python
-    repo: https://github.com/YOUR_USERNAME/notch-transcription-skill
+    repo: https://github.com/Tigabu-eng/notch-transcription
     plan: free
     envVars:
       - key: NOTCH_API_URL
